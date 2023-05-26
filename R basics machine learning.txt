@@ -1,0 +1,22 @@
+# Instale e carregue o pacote caret se ainda não o tiver feito
+# install.packages("caret")
+library(caret)
+
+# Carregue o conjunto de dados iris
+data(iris)
+
+# Divida o conjunto de dados em conjuntos de treinamento e teste
+set.seed(123)
+trainIndex <- createDataPartition(iris$Species, p = .8, list = FALSE, times = 1)
+irisTrain <- iris[ trainIndex,]
+irisTest  <- iris[-trainIndex,]
+
+# Treine um modelo de Random Forest
+# Especifique o método de "Random Forest" na função train()
+model <- train(Species ~ ., data = irisTrain, method = "rf", importance = TRUE)
+
+# Faça previsões no conjunto de teste
+predictions <- predict(model, irisTest)
+
+# Avalie a precisão do modelo
+confusionMatrix(predictions, irisTest$Species)
